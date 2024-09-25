@@ -22,7 +22,7 @@ import { updateNotificationOneAction } from "../../actions/userActions";
 import { updateNotificationTwoAction } from "../../actions/userActions";
 import { updateNotificationThreeAction } from "../../actions/userActions";
 import { updateNotificationFourAction } from "../../actions/userActions";
-
+import DOMPurify from 'dompurify';
 
 
 

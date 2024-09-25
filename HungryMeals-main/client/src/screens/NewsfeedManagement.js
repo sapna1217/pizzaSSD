@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import truncate from 'lodash/truncate';
 import { createNewsAction, deleteNewsAction, updateNewsAction } from '../actions/newsfeedAtion';
 import QRCode from 'qrcode.react';
+import DOMPurify from 'dompurify';
 
 
 let newsId;

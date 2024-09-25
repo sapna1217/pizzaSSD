@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from "../actions/cartAction";
 import { updateFoodsAction, addFoodsAction, deleteFoodsAction } from '../actions/pizzaAction';
 import Swal from 'sweetalert2';
+import DOMPurify from 'dompurify';
 
 
 let foodId;

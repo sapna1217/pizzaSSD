@@ -7,6 +7,7 @@ import { updateNotificationFourAction, updateNotificationOneAction, updateNotifi
 import { updateNotificationTwoAction } from '../actions/userActions'
 import { updateNotificationAction } from '../actions/notificationAction';
 import Swal from 'sweetalert2';
+import DOMPurify from 'dompurify';
 
 
 
