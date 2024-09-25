@@ -3,8 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const csurf = require("csurf");
-const cookieParser = require("cookie-parser")
-
+const cookieParser = require("cookie-parser");
 
 // Import models
 const Pizza = require('./models/PizzaModel');
@@ -23,9 +22,7 @@ const Stocks = require('./models/stocksModel');
 // Initialize app
 const app = express();
 
-
-
-
+// Initialize database connection
 const db = require('./db');
 
 // Middleware
@@ -43,9 +40,6 @@ app.use((req, res, next) => {
   res.cookie('XSRF-TOKEN', req.csrfToken()); // Setting the CSRF token as a cookie
   next();
 });
-
-
-
 
 // Import routes
 const pizzaRoute = require('./routes/pizzasRoute');
@@ -79,12 +73,12 @@ app.use('/api/refunds/', refundRoute);
 app.use('/api/stocks/', stocksRoute);
 app.use('/api/stockspurchase', stockspurchaseRoute);
 
-
 // Static files (for future extensions or uploads)
 app.use(express.static(path.join(__dirname, 'public')));
-// Test route
+
+// Test route with CSRF token check
 app.get("/", (req, res) => {
-  res.send("Server Working! CSRF ENABLE ");
+  res.send("Server Working! CSRF token is available in cookies.");
 });
 
 // Start server
