@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 const router = express.Router();
 const Driver = require("../models/driverModel")
 const Order = require('../models/orderModel')
@@ -57,7 +58,7 @@ router.post("/addDriver", async (req, res) => {
 });
 
 // Update driver by id
-router.put('/driver/:id', async (req, res) => {
+/*router.put('/driver/:id', async (req, res) => {
   try {
     const driver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!driver) {
@@ -67,6 +68,41 @@ router.put('/driver/:id', async (req, res) => {
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
+});*/
+
+const updateDriverSchema = Joi.object({
+  name: Joi.string().optional(),
+  licenseNumber: Joi.string().optional(),
+  vehicleType: Joi.string().optional(),
+  // Add any other fields you want to validate
+});
+
+router.put('/driver/:id', async (req, res) => {
+try {
+  // Validate the ID
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).send({ error: 'Invalid driver ID' });
+  }
+
+  // Validate and sanitize the body
+  const { error, value } = updateDriverSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send({ error: error.details[0].message });
+  }
+
+  // Update driver with sanitized input
+  const driver = await Driver.findByIdAndUpdate(req.params.id, value, { new: true });
+
+  if (!driver) {
+    return res.status(404).send({ error: 'Driver not found' });
+  }
+
+  // Safely return the updated driver details
+  res.json(driver);
+
+} catch (error) {
+  res.status(500).send({ error: error.message });
+}
 });
 
 // DELETE a driver by their ID

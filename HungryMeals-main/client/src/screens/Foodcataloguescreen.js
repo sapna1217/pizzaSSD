@@ -619,7 +619,7 @@ export default function Foodcataloguescreen() {
                         <div onClick={handleShow}>
 
                           <h1>{name || foods.name}</h1>
-                          <img src={image || foods.image} className="img-fluid" style={{ height: '200px', width: '200px' }} />
+                          <img src={DOMPurify.sanitize(image || foods.image)} className="img-fluid" style={{ height: '200px', width: '200px' }} />
 
                         </div>
 
@@ -664,7 +664,7 @@ export default function Foodcataloguescreen() {
                           </Modal.Header>
 
                           <Modal.Body>
-                            <img src={foods.image || newImage} className="img-fluid" style={{ height: '470px', width: '500px', marginBottom: '20px' }} />
+                            <img src={DOMPurify.sanitize(foods.image || newImage)} className="img-fluid" style={{ height: '470px', width: '500px', marginBottom: '20px' }} />
                             <p10 style={{ marginTop: '20px' }}>{foods.description || newDescription}</p10>
                           </Modal.Body>
 
@@ -918,7 +918,7 @@ export default function Foodcataloguescreen() {
                         <div onClick={handleShow}>
 
                           <h1>{newName || foods.newName}</h1>
-                          <img src={newImage || foods.newImage} className="img-fluid" style={{ height: '200px', width: '200px' }} />
+                          <img src={DOMPurify.sanitize(newImage || foods.newImage)} className="img-fluid" style={{ height: '200px', width: '200px' }} />
 
                         </div>
 

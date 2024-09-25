@@ -584,7 +584,7 @@ export default function Profilescreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={publicnotificationsArray.notificationImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(publicnotificationsArray.notificationImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -619,7 +619,7 @@ export default function Profilescreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationOneImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationOneImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -655,7 +655,7 @@ export default function Profilescreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationTwoImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationTwoImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -689,7 +689,7 @@ export default function Profilescreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationThreeImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationThreeImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -723,7 +723,7 @@ export default function Profilescreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationFourImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationFourImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />

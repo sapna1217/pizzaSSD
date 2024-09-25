@@ -63,7 +63,7 @@ router.post("/addAdmin", async (req, res) => {
 
 
 
-router.get("/getcurrentadmin/:id", async (req, res) => {
+/*router.get("/getcurrentadmin/:id", async (req, res) => {
 
     let adminID = req.params.id;
     try {
@@ -75,7 +75,33 @@ router.get("/getcurrentadmin/:id", async (req, res) => {
         return res.status(400).json({ message: error });
     }
 
-})
+})*/
+
+router.get("/getcurrentadmin/:id", async (req, res) => {
+
+    let adminID = req.params.id;
+
+    // Validate if the adminID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(adminID)) {
+        return res.status(400).json({ message: "Invalid admin ID" });
+    }
+
+    try {
+        const currentAdmin = await Admin.findById(adminID);
+
+        // Ensure the output is properly sanitized before sending
+        if (!currentAdmin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        // Sanitize the output or ensure no HTML tags are returned
+        res.json(currentAdmin);
+
+    } catch (error) {
+        return res.status(400).json({ message: "Error fetching admin data" });
+    }
+
+});
 
 router.get("/getalladmins", async (req, res) => {
 

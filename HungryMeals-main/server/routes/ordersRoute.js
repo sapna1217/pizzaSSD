@@ -1,212 +1,195 @@
 const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const Order = require('../models/orderModel')
+const Order = require('../models/orderModel');
+const stripe = require("stripe")("sk_test_51FfQBPHdYSqFNE7IJEw81G8DKDo4N94EVn2rMf4RSZsipha3JhUtLCf4lwdl3YgswTcSfMhsrfuUHlr5Ekdds5h900pSVlOeSb");
 
-const stripe = require("stripe")("sk_test_51FfQBPHdYSqFNE7IJEw81G8DKDo4N94EVn2rMf4RSZsipha3JhUtLCf4lwdl3YgswTcSfMhsrfuUHlr5Ekdds5h900pSVlOeSb")
-
+// Place order
 router.post("/placeorder", async (req, res) => {
+    const { token, subtotal, currentUser, cartItems, coordinates } = req.body;
 
-    const { token, subtotal, currentUser, cartItems,coordinates } = req.body
+    // Input validation
+    if (!token || !subtotal || !currentUser || !cartItems || !coordinates) {
+        return res.status(400).json({ message: "All fields are required." });
+    }
 
     try {
         const customer = await stripe.customers.create({
             email: token.email,
-            source: token.id
-        })
+            source: token.id,
+        });
+
         const payment = await stripe.charges.create({
             amount: subtotal * 100,
             currency: 'LKR',
             customer: customer.id,
-            receipt_email: token.email
+            receipt_email: token.email,
         }, {
-            idempotencyKey: uuidv4()
-        })
+            idempotencyKey: uuidv4(),
+        });
 
         if (payment) {
-
-            const neworder = new Order({
-
+            const newOrder = new Order({
                 name: currentUser.name,
                 email: currentUser.email,
                 userid: currentUser._id,
                 orderItems: cartItems,
-                //changed
-                coordinates:coordinates,
+                coordinates: coordinates,
                 orderAmount: subtotal,
                 shippingAddress: {
-
                     street: token.card.address_line1,
                     city: token.card.address_city,
                     country: token.card.address_country,
                     pincode: token.card.address_zip,
-
                 },
+                transactionId: payment.source.id,
+            });
 
-                transactionId: payment.source.id
-
-            })
-
-            neworder.save()
-
-
-            res.send('Order placed successfully')
-
+            await newOrder.save();
+            res.status(201).send('Order placed successfully');
         } else {
-
-            res.send('Payment Failed')
-
+            res.status(400).send('Payment Failed');
         }
     } catch (error) {
-
-        return res.status(400).json({ message: 'Something went wrong' });
+        return res.status(500).json({ message: 'Something went wrong: ' + error.message });
     }
-
 });
 
+// Get user orders
 router.post("/getuserorders", async (req, res) => {
+    const { userid } = req.body;
 
-    const { userid } = req.body
+    // Input validation
+    if (!userid) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
 
     try {
-        const orders = await Order.find({ userid: userid }).sort({_id : -1})
-        res.send(orders)
+        const orders = await Order.find({ userid: userid }).sort({ _id: -1 });
+        res.json(orders);
     } catch (error) {
-        return res.status(400).json({ message: 'Something went wrong' })
+        return res.status(500).json({ message: 'Something went wrong: ' + error.message });
     }
 });
 
+// Get all orders
 router.get("/getallorders", async (req, res) => {
-
-
     try {
-
-        const orders = await Order.find()
-        res.send(orders)
-
+        const orders = await Order.find();
+        res.json(orders);
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(500).json({ message: error.message });
     }
 });
 
+// Delete order
 router.delete("/delete/Order/:id", async (req, res) => {
-
-    let OrderID = req.params.id;
+    let orderId = req.params.id;
 
     try {
-        await Order.findByIdAndDelete(OrderID)
-
-        res.send('Order Deleted Successfully')
-    }
-
-    catch (error) {
-
-
-        return res.status(400).json({ message: error });
+        const deletedOrder = await Order.findByIdAndDelete(orderId);
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.send('Order Deleted Successfully');
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 });
 
-//get current order
+// Get current order
 router.get("/getcurrentorders/:id", async (req, res) => {
-
     let orderId = req.params.id;
+
     try {
-
-        const currentorder = await Order.findById(orderId)
-        res.send(currentorder)
-
+        const currentOrder = await Order.findById(orderId);
+        if (!currentOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.json(currentOrder);
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(500).json({ message: error.message });
     }
+});
 
-})
-
-
+// Update order status
 router.put("/update/order/status/:id", async (req, res) => {
-
     let orderId = req.params.id;
     const { isDelivered } = req.body;
 
-    const updateisDelivered = {
-
-        isDelivered,
-
+    if (typeof isDelivered !== "boolean") {
+        return res.status(400).json({ message: "isDelivered must be a boolean." });
     }
 
     try {
-
-        await Order.findByIdAndUpdate(orderId, updateisDelivered)
-        res.send('Order deliver request Successfully')
-
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, { isDelivered }, { new: true });
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.send('Order delivery request updated successfully');
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(500).json({ message: error.message });
     }
 });
 
+// Update refund request status
 router.put("/update/order/refund/request/:id", async (req, res) => {
-
     let orderId = req.params.id;
     const { sendrefundStatus } = req.body;
 
-    const updatesendrefundStatus = {
-
-        sendrefundStatus,
-
+    if (typeof sendrefundStatus !== "boolean") {
+        return res.status(400).json({ message: "sendrefundStatus must be a boolean." });
     }
 
     try {
-
-        await Order.findByIdAndUpdate(orderId, updatesendrefundStatus)
-        res.send('Order refund request Successfully')
-
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, { sendrefundStatus }, { new: true });
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.send('Order refund request updated successfully');
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(500).json({ message: error.message });
     }
 });
 
+// Update order status from user
 router.put("/update/order/refund/request/user/:id", async (req, res) => {
-
     let orderId = req.params.id;
     const { orderStatus } = req.body;
 
-    const updateorderStatus = {
-
-        orderStatus,
-
+    if (!orderStatus) {
+        return res.status(400).json({ message: "Order status is required." });
     }
 
     try {
-
-        await Order.findByIdAndUpdate(orderId, updateorderStatus)
-        res.send('Order refund request Successfully')
-
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, { orderStatus }, { new: true });
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.send('Order refund request status updated successfully');
     } catch (error) {
-        return res.status(400).json({ message: error });
-    }
+        return res.status(500).json({ message: error.message });
+    }
 });
 
-
+// Update transaction status
 router.put("/update/transactionstatus/:id", async (req, res) => {
-
-    let salesid = req.params.id;
+    let salesId = req.params.id;
     const { isSuccessfull } = req.body;
-  
-    const updateisSuccessful = {
-  
-        isSuccessfull,
-  
+
+    if (typeof isSuccessfull !== "boolean") {
+        return res.status(400).json({ message: "isSuccessfull must be a boolean." });
     }
-  
+
     try {
-  
-        await Order.findByIdAndUpdate(salesid, updateisSuccessful)
-        res.send('Refund Status Updated Successfully')
-  
+        const updatedOrder = await Order.findByIdAndUpdate(salesId, { isSuccessfull }, { new: true });
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+        res.send('Refund Status Updated Successfully');
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(500).json({ message: error.message });
     }
-  });
+});
 
-
-
-module.exports = router
+module.exports = router;

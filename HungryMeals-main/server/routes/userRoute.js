@@ -118,7 +118,7 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.get("/getcurrentuser/:id", async (req, res) => {
+/*router.get("/getcurrentuser/:id", async (req, res) => {
 
     let userId = req.params.id;
     try {
@@ -130,7 +130,26 @@ router.get("/getcurrentuser/:id", async (req, res) => {
         return res.status(400).json({ message: error });
     }
 
-})
+})*/
+
+// Get current user
+router.get("/getcurrentuser/:id", async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const currentUser = await User.findById(userId);
+        
+        // Check if the user exists
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.json(currentUser);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error fetching user: ' + error.message });
+    }
+});
+
 
 router.get("/getallusers", async (req, res) => {
 

@@ -22,9 +22,12 @@ import { updateNotificationOneAction } from "../../actions/userActions";
 import { updateNotificationTwoAction } from "../../actions/userActions";
 import { updateNotificationThreeAction } from "../../actions/userActions";
 import { updateNotificationFourAction } from "../../actions/userActions";
+import DOMPurify from 'dompurify';
 
-
-
+// Within your component
+const safeHeader = DOMPurify.sanitize(notificationsArray.notificationThreeHeader);
+const safeBody = DOMPurify.sanitize(notificationsArray.notificationThreeBody);
+const safeImageSrc = DOMPurify.sanitize(notificationsArray.notificationThreeImage);
 
 var isVerified;
 var notificationsArray = new Array();
@@ -577,37 +580,35 @@ export default function Detailsscreen() {
 
                 {/* Public Notification Model */}
 
-                <div class="modal fade" id="staticBackdroPubnoti" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">{publicnotificationsArray.notificationHeader}<span className="text-muted" style={{ fontSize: '12px' }}> - {publicnotificationsArray.notificationDate}</span></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body ">
-
-                                <div class=" m-1">
-
-                                    <img src={publicnotificationsArray.notificationImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
-
-                                    <div class="card-body">
-                                        <br />
-                                        <h4 class="card-title">{publicnotificationsArray.notificationHeader}</h4>
-                                        <br />
-                                        <p class="card-text text-muted ">{publicnotificationsArray.notificationBody}</p>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-
-                                <button type="button" class="btn " data-bs-dismiss="modal">Close</button>
-
-                            </div>
+                <div className="modal fade" id="staticBackdroPubnoti" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="staticBackdropLabel">
+                        {safeHeader}
+                        <span className="text-muted" style={{ fontSize: '12px' }}>
+                            - {publicnotificationsArray.notificationDate}
+                        </span>
+                    </h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-body">
+                    <div className="m-1">
+                        <img src={safeImageSrc} style={{ borderRadius: '15px' }} className="card-img-top shadow" alt="Notification Image" />
+                        <div className="card-body">
+                            <br />
+                            <h4 className="card-title">{safeHeader}</h4>
+                            <br />
+                            <p className="card-text text-muted">{safeBody}</p>
                         </div>
                     </div>
                 </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
                 {/* Notification Model 1 */}
@@ -623,7 +624,7 @@ export default function Detailsscreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationOneImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationOneImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -659,7 +660,7 @@ export default function Detailsscreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationTwoImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationTwoImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -693,7 +694,7 @@ export default function Detailsscreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationThreeImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationThreeImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />
@@ -727,7 +728,7 @@ export default function Detailsscreen() {
 
                                 <div class=" m-1">
 
-                                    <img src={notificationsArray.notificationFourImage} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
+                                    <img src={DOMPurify.sanitize(notificationsArray.notificationFourImage)} style={{ borderRadius: '15px' }} class={"card-img-top shadow"} alt="..." />
 
                                     <div class="card-body">
                                         <br />

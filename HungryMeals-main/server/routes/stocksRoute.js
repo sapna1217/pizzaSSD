@@ -75,7 +75,7 @@ router.delete("/delete/stocks/:id", async (req, res) => {
 });
 
 //get current 
-router.get("/getcurrentstocks/:id", async (req, res) => {
+/*router.get("/getcurrentstocks/:id", async (req, res) => {
 
     let ItemId = req.params.id;
     try {
@@ -87,6 +87,23 @@ router.get("/getcurrentstocks/:id", async (req, res) => {
         return res.status(400).json({ message: error });
     }
 
-})
+})*/
+
+router.get("/getcurrentstocks/:id", async (req, res) => {
+    const itemId = req.params.id;
+
+    try {
+        const currentStocks = await Stocks.findById(itemId);
+        
+        // Check if the stock item exists
+        if (!currentStocks) {
+            return res.status(404).json({ message: "Stock not found." });
+        }
+
+        res.json(currentStocks);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error fetching stock: ' + error.message });
+    }
+});
 
 module.exports = router;

@@ -78,7 +78,7 @@ router.delete("/delete/stockspurchase/:id", async (req, res) => {
 });
 
 //get currentpurchase 
-router.get("/getcurrentstockpurchases/:id", async (req, res) => {
+/*router.get("/getcurrentstockpurchases/:id", async (req, res) => {
 
     let PurchaseId = req.params.id;
     try {
@@ -90,5 +90,24 @@ router.get("/getcurrentstockpurchases/:id", async (req, res) => {
         return res.status(400).json({ message: error });
     }
 
-})
+})*/
+
+// Get current stock purchases
+router.get("/getcurrentstockpurchases/:id", async (req, res) => {
+    const purchaseId = req.params.id;
+
+    try {
+        const currentStockPurchases = await Purchase.findById(purchaseId);
+        
+        // Check if the purchase exists
+        if (!currentStockPurchases) {
+            return res.status(404).json({ message: "Purchase not found." });
+        }
+
+        res.json(currentStockPurchases);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error fetching purchase: ' + error.message });
+    }
+});
+
 module.exports = router;

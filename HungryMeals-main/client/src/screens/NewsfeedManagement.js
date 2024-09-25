@@ -355,7 +355,7 @@ export default function Newsfeedmanagement() {
                                     <div class="col-md-4 mb-4">
                                         <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
 
-                                            <img src={news.image} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
+                                            <img src={DOMPurify.sanitize(news.image)} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
 
                                         </div>
                                     </div>
@@ -432,7 +432,7 @@ export default function Newsfeedmanagement() {
                                     <div class="col-md-4 mb-4">
                                         <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
 
-                                            <img src={image || news.image} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
+                                            <img src={DOMPurify.sanitize(image || news.image)} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
 
                                             <div class="form-group">
                                                 <br></br>
@@ -569,7 +569,7 @@ export default function Newsfeedmanagement() {
                                     <div class="col-md-4 mb-4">
                                         <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
 
-                                            <img src={newImage} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
+                                            <img src={DOMPurify.sanitize(newImage)} class="img-fluid  shadow-lg" style={{ borderRadius: '25px' }} />
 
                                             <div class="form-group">
                                                 <br></br>
