@@ -26,9 +26,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 
-// Import and apply security configurations
-const applySecurityConfig = require('./securityConfig');
-applySecurityConfig(app);
+
 
 // Import routes
 const pizzaRoute = require('./routes/pizzasRoute');
