@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const csurf = require("csurf");
+const cookieParser = require("cookie-parser")
 
 
 // Import models
@@ -30,6 +32,17 @@ const db = require('./db');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());  // To parse cookies
+
+// CSRF Protection middleware
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection); // Apply CSRF protection globally
+
+// Send CSRF token to client
+app.use((req, res, next) => {
+  res.cookie('XSRF-TOKEN', req.csrfToken()); // Setting the CSRF token as a cookie
+  next();
+});
 
 
 
@@ -71,7 +84,7 @@ app.use('/api/stockspurchase', stockspurchaseRoute);
 app.use(express.static(path.join(__dirname, 'public')));
 // Test route
 app.get("/", (req, res) => {
-  res.send("Server Working!");
+  res.send("Server Working! CSRF ENABLE ");
 });
 
 // Start server
