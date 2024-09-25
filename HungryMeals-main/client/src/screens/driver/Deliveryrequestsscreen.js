@@ -177,7 +177,7 @@ export default function Deliveryrequestscreen() {
     // search button
     useEffect(() => {
         const results = orders.filter(orders => {
-            return orders._id.toLowerCase().match(searchOrders.toLowerCase());
+            return orders._id.toLowerCase().includes(searchOrders.toLowerCase());
         });
 
         setFilterdOrders(results);

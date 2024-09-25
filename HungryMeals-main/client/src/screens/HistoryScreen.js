@@ -83,7 +83,7 @@ export default function HistoryScreen() {
     // search button
     useEffect(() => {
         const results = refunds.filter(refunds => {
-            return refunds.email.toLowerCase().match(searchRefunds.toLowerCase());
+            return refunds.email.toLowerCase().includes(searchRefunds.toLowerCase());
         });
 
 

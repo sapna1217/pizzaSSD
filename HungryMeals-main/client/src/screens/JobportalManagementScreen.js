@@ -221,7 +221,7 @@ function JobportalManagementScreen() {
     // search button
     useEffect(() => {
         const results = jobs.filter(jobs => {
-            return jobs.jobtitle.toLowerCase().match(searchJobs.toLowerCase());
+            return jobs.jobtitle.toLowerCase().includes(searchJobs.toLowerCase());
         });
 
         setFilterdJobs(results);

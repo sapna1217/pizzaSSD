@@ -178,7 +178,7 @@ export default function RefundRequestScreen() {
     // search button
     useEffect(() => {
         const results = orders.filter(orders => {
-            return orders.createdAt.substring(5, 8).toLowerCase().match(searchOrders.toLowerCase());
+            return orders.createdAt.substring(5, 8).toLowerCase().includes(searchOrders.toLowerCase());
         });
 
         setFilterdOrders(results);

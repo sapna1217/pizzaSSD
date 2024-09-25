@@ -172,7 +172,7 @@ function StocksPurchasescreen() {
     // search button
     useEffect(() => {
         const results = Purchase.filter(Purchase => {
-            return Purchase._id.toLowerCase().match(searchPurchase.toLowerCase());
+            return Purchase._id.toLowerCase().includes(searchPurchase.toLowerCase());
         });
 
         setFilterdPurchase(results);

@@ -190,13 +190,28 @@ function TicketsManagementScreen() {
     ]
 
     // search button
-    useEffect(() => {
+    /*useEffect(() => {
         const results = tickets.filter(tickets => {
             return tickets.category.toLowerCase().match(searchTicket.toLowerCase());
         });
 
         setFilterdTickets(results);
+    }, [searchTicket]);*/
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escapes special characters
+    }
+    
+    useEffect(() => {
+        const sanitizedSearch = escapeRegExp(searchTicket.toLowerCase());
+    
+        const results = tickets.filter(ticket => {
+            return ticket.category.toLowerCase().match(sanitizedSearch);  // Use the sanitized input
+        });
+    
+        setFilterdTickets(results);
     }, [searchTicket]);
+    
 
 
     //delete

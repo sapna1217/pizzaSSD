@@ -150,7 +150,7 @@ function JobApplicantsManagementScreen() {
     // search button
     useEffect(() => {
         const results = applicants.filter(applicants => {
-            return applicants._id.toLowerCase().match(searchApplicant.toLowerCase());
+            return applicants._id.toLowerCase().includes(searchApplicant.toLowerCase());
         });
 
         setFilterdApplicants(results);

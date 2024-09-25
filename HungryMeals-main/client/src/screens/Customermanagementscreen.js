@@ -133,7 +133,7 @@ function Customermanagementscreen() {
     // search button
     useEffect(() => {
         const result = users.filter(users => {
-            return users.name.toLowerCase().match(search.toLowerCase());
+            return users.name.toLowerCase().includes(search.toLowerCase());
         });
 
         setFilterdUsers(result);
@@ -397,7 +397,7 @@ function Customermanagementscreen() {
     // search button
     useEffect(() => {
         const results = admins.filter(admins => {
-            return admins.AdminName.toLowerCase().match(searchAdmin.toLowerCase());
+            return admins.AdminName.toLowerCase().includes(searchAdmin.toLowerCase());
         });
 
         setFilterdAdmins(results);

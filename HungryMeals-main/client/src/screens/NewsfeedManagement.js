@@ -161,13 +161,12 @@ export default function Newsfeedmanagement() {
 
 
     useEffect(() => {
-        const result = users.filter(user => {
-            return user.name.toLowerCase().includes(search.toLowerCase());
+        const result = news.filter(news => {
+            return news.header.toLowerCase().includes(search.toLowerCase());
         });
-    
-        setFilterdUsers(result);
+
+        setFilterdNews(result);
     }, [search]);
-    
 
 
 

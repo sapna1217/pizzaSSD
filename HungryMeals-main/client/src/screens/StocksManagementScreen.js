@@ -140,7 +140,7 @@ function StocksManagementScreen() {
     // search button
     useEffect(() => {
         const results = Items.filter(Items => {
-            return Items._id.toLowerCase().match(searchItem.toLowerCase());
+            return Items._id.toLowerCase().includes(searchItem.toLowerCase());
         });
 
         setFilterdItems(results);

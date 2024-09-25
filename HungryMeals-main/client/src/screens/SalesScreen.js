@@ -122,7 +122,7 @@ export default function SalesScreen() {
     //search button
     useEffect(() => {
         const results = orders.filter(order => {
-            return order.createdAt.substring(5, 8).toLowerCase().match(searchOrders.toLowerCase());
+            return order.createdAt.substring(5, 8).toLowerCase().includes(searchOrders.toLowerCase());
         });
 
         setFilterdOrders(results);

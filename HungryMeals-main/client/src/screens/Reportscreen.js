@@ -121,7 +121,7 @@ export default function Reportscreen() {
     //search button
     useEffect(() => {
         const results = orders.filter(order => {
-            return order.createdAt.substring(0, 10).toLowerCase().match(searchOrders.toLowerCase());
+            return order.createdAt.substring(0, 10).toLowerCase().includes(searchOrders.toLowerCase());
         });
 
         setFilterdOrders(results);
@@ -213,7 +213,7 @@ export default function Reportscreen() {
     // search button
     useEffect(() => {
         const results = refunds.filter(refunds => {
-            return refunds.createdAt.substring(0, 10).toLowerCase().match(searchRefunds.toLowerCase());
+            return refunds.createdAt.substring(0, 10).toLowerCase().includes(searchRefunds.toLowerCase());
         });
 
 
