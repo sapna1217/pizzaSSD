@@ -479,11 +479,13 @@ export default function Notificationmanagementscreen() {
 
     useEffect(() => {
         const result = users.filter(users => {
-            return users.name.toLowerCase().match(search.toLowerCase());
+            return users.name.toLowerCase().includes(search.toLowerCase());
         });
 
         setFilterdUsers(result);
     }, [search]);
+
+   
 
 
 
