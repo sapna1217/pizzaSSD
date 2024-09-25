@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const helmet = require('helmet');
 
 // Import models
 const Pizza = require('./models/PizzaModel');
@@ -19,12 +20,19 @@ const Stocks = require('./models/stocksModel');
 
 // Initialize app
 const app = express();
+app.use(helmet());
+app.use(helmet.noSniff());
+
+
+// Static files (for future extensions or uploads)
+app.use(express.static(path.join(__dirname, 'public')));
 const db = require('./db');
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
+
 
 
 
@@ -60,8 +68,6 @@ app.use('/api/refunds/', refundRoute);
 app.use('/api/stocks/', stocksRoute);
 app.use('/api/stockspurchase', stockspurchaseRoute);
 
-// Static files (for future extensions or uploads)
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Test route
 app.get("/", (req, res) => {
